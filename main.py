@@ -1,4 +1,4 @@
-from sklearn.neural_network import MLPClassifier
+from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 
 from sklearn.preprocessing import StandardScaler
@@ -19,10 +19,10 @@ dataFile = "WaveData.csv"
 waveAttributesStrings = ["Date/Time"]
 waveRowsStrings = pd.read_csv(dataFile, skiprows=0, usecols=[0])
 
-waveAttributesFloats = ["significant height","max height","zero upcrossing wave period","peak energy wave period","Peak Direction","sea surface temperature"]
+waveAttributesFloats = ["significant height","max height","zero upcrossing wave period","peak energy wave period","peak direction","temperature"]
 waveRowsFloats = np.loadtxt(dataFile, delimiter=",", skiprows=1, usecols=(1, 2, 3, 4, 5, 6))
 
-
+allAttributes = ["day", "significant height","max height","zero upcrossing wave period","peak energy wave period","peak direction","temperature"]
 
 
 # Combining each set of times into single day elements.
@@ -32,6 +32,8 @@ def advanceDay(day):
     if day > 365:
         day = 1
     return day
+
+
 
 daysList = []
 currDay = 1
@@ -50,6 +52,7 @@ while currDataIndex < maxDataIndex:
 
 
 
+
 # Need to remove rows with -99. Will round out the values by using surrounding ones because numpy cannot pop values
 for index, row in enumerate(waveRowsFloats):
     for indexInRow, value in enumerate(row):
@@ -62,45 +65,44 @@ for index, row in enumerate(waveRowsFloats):
 
 
 
-data = np.append(daysList, waveRowsFloats, axis=1)
-
-print(data)
 
 
-
-#plt.scatter(daysList, waveRowsFloats[:, 5])
-#plt.show()
+# Appending the days to the beginning of the waveRowsFloats.
+# This effectively replaces the date/time in the original data.
+dataTemp = np.append(daysList, waveRowsFloats, axis=1)
+data = pd.DataFrame(dataTemp, columns=allAttributes)
 
 
 
 
 
-# # Algorithm
-# logisticReg = linear_model.LogisticRegression()
+plt.scatter(dataTemp[:, 0], dataTemp[:, 6])
+plt.show()
+
+
+# y is the temperature
+train, test = train_test_split(data, random_state=42)
+xTrain = train[train.columns[0:3]]
+yTrain = train['temperature']
+xTest = test[test.columns[0:3]]
+yTest = test['temperature']
+
+
+scaler = StandardScaler()
+scaler.fit(xTrain)
+
+xTrain = scaler.transform(xTrain)
+xTest = scaler.transform(xTest)
 
 
 
-# Training
-# x = np.array(daysList).reshape(-1, 1)
-# y = waveRowsFloats[:, 5]
-x = waveRowsFloats
-y = waveRowsStrings
+neuralNetwork = MLPRegressor(hidden_layer_sizes=(10, 10, 10), max_iter=1000, activation='tanh')
+neuralNetwork.fit(xTrain, yTrain)
 
+testData = [[250,0.774,1.17]]
 
+predictions = neuralNetwork.predict(testData)
+print(predictions)
 
-
-
-
-
-# xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.01, random_state=4)
-# neuralNetwork = MLPClassifier(activation='logistic', solver='sgd', hidden_layer_sizes=(1, 2), random_state=1)
-# neuralNetwork.fit(xTrain, yTrain.values.ravel())
-# prediction = neuralNetwork.predict(xTest)
-# testValues = yTest.values
-# correctCount = 0
-# for i in range(len(prediction)):
-#     if prediction[i] == testValues[i]:
-#         correctCount += 1
-#
-# print("This is the accuracy: ", correctCount/len(prediction))
+print("Accuracy Test: ", neuralNetwork.score(xTest, yTest))
 
