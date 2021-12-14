@@ -1,6 +1,9 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
+
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -23,8 +26,15 @@ waveRowsFloats = np.loadtxt(dataFile, delimiter=",", skiprows=1, usecols=(1, 2, 
 
 
 # Combining each set of times into single day elements.
+
+def advanceDay(day):
+    day += 1
+    if day > 365:
+        day = 1
+    return day
+
 daysList = []
-currDay = 0
+currDay = 1
 currDataIndex = 0
 maxDataIndex = waveRowsStrings.size
 
@@ -35,7 +45,8 @@ while currDataIndex < maxDataIndex:
             currDataIndex += 1
         else:
             break
-    currDay += 1
+
+    currDay = advanceDay(currDay) # After looping through all the times in a day, go to next day.
 
 
 
