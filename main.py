@@ -41,7 +41,7 @@ maxDataIndex = waveRowsStrings.size
 while currDataIndex < maxDataIndex:
     for i in range(0, 46):
         if currDataIndex < maxDataIndex:
-            daysList.append(currDay)
+            daysList.append([currDay])
             currDataIndex += 1
         else:
             break
@@ -62,8 +62,14 @@ for index, row in enumerate(waveRowsFloats):
 
 
 
-plt.scatter(daysList, waveRowsFloats[:, 5])
-plt.show()
+data = np.append(daysList, waveRowsFloats, axis=1)
+
+print(data)
+
+
+
+#plt.scatter(daysList, waveRowsFloats[:, 5])
+#plt.show()
 
 
 
@@ -80,28 +86,21 @@ plt.show()
 x = waveRowsFloats
 y = waveRowsStrings
 
-print("1")
-xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.01, random_state=4)
-print("2")
-neuralNetwork = MLPClassifier(activation='logistic', solver='sgd', hidden_layer_sizes=(1, 2), random_state=1)
-print("2.5")
-neuralNetwork.fit(xTrain, yTrain.values.ravel())
-print("3")
-prediction = neuralNetwork.predict(xTest)
-print("4")
-testValues = yTest.values
-correctCount = 0
-print("5")
-for i in range(len(prediction)):
-    if prediction[i] == testValues[i]:
-        correctCount += 1
 
-print("This is the accuracy: ", correctCount/len(prediction))
 
-# model = logisticReg.fit(xTrain, yTrain)
-# predictions = model.predict(xTest)
+
+
+
+
+# xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.01, random_state=4)
+# neuralNetwork = MLPClassifier(activation='logistic', solver='sgd', hidden_layer_sizes=(1, 2), random_state=1)
+# neuralNetwork.fit(xTrain, yTrain.values.ravel())
+# prediction = neuralNetwork.predict(xTest)
+# testValues = yTest.values
+# correctCount = 0
+# for i in range(len(prediction)):
+#     if prediction[i] == testValues[i]:
+#         correctCount += 1
 #
-# print("Predictions: ", predictions)
-# print("R^2 value: ", logisticReg.score(x, y))
-# print("coedd: ", logisticReg.coef_)
-# print("intercept: ", logisticReg.intercept_)
+# print("This is the accuracy: ", correctCount/len(prediction))
+
