@@ -116,7 +116,7 @@ print(xTrain)
 
 print("Loading")
 
-neuralNetwork = MLPRegressor(hidden_layer_sizes=[10], max_iter=1000, activation='logistic', solver='sgd', alpha=1)
+neuralNetwork = MLPRegressor(hidden_layer_sizes=(5, 5, 5), max_iter=1000, activation='logistic', solver='sgd', alpha=1)
 neuralNetwork.fit(xTrain, yTrain)
 
 #  "month", "day", "year", "hour", "min",

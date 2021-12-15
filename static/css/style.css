@@ -1,0 +1,25 @@
+head{
+    width: 100%;
+    margin: 0;
+}
+
+body{
+    height: 100%;
+    width: 100%;
+    margin:0;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+
+
+img{
+    margin: 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.bgImg .theBayImg{
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
