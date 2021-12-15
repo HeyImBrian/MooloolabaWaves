@@ -1,7 +1,6 @@
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 
-from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import classification_report, confusion_matrix
 
@@ -9,8 +8,40 @@ from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 import csv
-from io import StringIO
 import datetime
+
+from flask import Flask, render_template, url_for, request
+
+
+# Setting up Flask.
+# This will communicate with the webpage.
+app = Flask(__name__)  # __name__ references this file
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    tempResult = False
+    if request.method == 'POST':
+        form = request.form
+        tempResult = predictTemperature(form)
+
+    return render_template('index.html')
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
