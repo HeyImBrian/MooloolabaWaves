@@ -2,6 +2,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import classification_report, confusion_matrix
 
 from matplotlib import pyplot as plt
@@ -9,10 +10,8 @@ import numpy as np
 import pandas as pd
 import csv
 from io import StringIO
-
 import datetime
 
-from sklearn.datasets import make_regression
 
 
 # Load csv into different variables
@@ -102,15 +101,22 @@ xTest = test[test.columns[0:5]]
 yTest = test['temperature']
 
 
-scaler = StandardScaler()
-scaler.fit(xTrain)
+# Scale the data to work better with machine learning.
+# scaler = StandardScaler()
+# scaler.fit(xTrain)
+#
+# xTrain = scaler.transform(xTrain)
+# xTest = scaler.transform(xTest)
+scaler = MinMaxScaler()
+xTrain = scaler.fit_transform(xTrain)
+xTest = scaler.fit_transform(xTest)
 
-xTrain = scaler.transform(xTrain)
-xTest = scaler.transform(xTest)
+
+print(xTrain)
 
 print("Loading")
 
-neuralNetwork = MLPRegressor(hidden_layer_sizes=(10, 10, 10), max_iter=1000, activation='logistic')
+neuralNetwork = MLPRegressor(hidden_layer_sizes=[10], max_iter=1000, activation='logistic', solver='sgd', alpha=1)
 neuralNetwork.fit(xTrain, yTrain)
 
 #  "month", "day", "year", "hour", "min",
@@ -120,18 +126,15 @@ neuralNetwork.fit(xTrain, yTrain)
 
 
 
-# # still testing
-# Xnew, _ = make_regression(n_samples=3, n_features=5, noise=1, random_state=1)
-# ynew = neuralNetwork.predict(Xnew)
-# for i in range(len(Xnew)):
-# 	print("X=%s, Predicted=%s" % (Xnew[i], ynew[i]))
 
 # big test
+# prediction values are first ran through the scalar.transform feature.
 testList = []
 for index, i in enumerate(range(0, 12)):
     tempTest = np.array([index+1, 1.0, 2017.0, 1.0, 0.0])
     testList.append(tempTest)
 
+testList = scaler.fit_transform(testList)
 bruh = neuralNetwork.predict(testList)
 
 for i in range(len(testList)):
