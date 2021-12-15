@@ -131,7 +131,7 @@ neuralNetwork.fit(xTrain, yTrain)
 # prediction values are first ran through the scalar.transform feature.
 testList = []
 for index, i in enumerate(range(0, 12)):
-    tempTest = np.array([index+1, 1.0, 2017.0, 1.0, 0.0])
+    tempTest = np.array([index+1, 1.0, 2025.0, 1.0, 0.0])
     testList.append(tempTest)
 
 testList = scaler.fit_transform(testList)
