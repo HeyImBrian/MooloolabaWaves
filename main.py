@@ -11,26 +11,11 @@ import csv
 import datetime
 import pickle
 
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
 
 
-# Setting up Flask.
-# This will communicate with the webpage.
-app = Flask(__name__)  # __name__ references this file
 
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    tempResult = False
-    if request.method == 'POST':
-        form = request.form
-        temperatureResult = predictTemperature(form)
-
-    return render_template('index.html')
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 
 
@@ -128,26 +113,16 @@ data = pd.DataFrame(dataTemp, columns=allAttributes)
 
 # y is the temperature
 train, test = train_test_split(data, random_state=42)
-xTrain = train[train.columns[0:5]]
+xTrainData = train[train.columns[0:5]]
 yTrain = train['temperature']
-xTest = test[test.columns[0:5]]
+xTestData = test[test.columns[0:5]]
 yTest = test['temperature']
 
 
 # Scale the data to work better with machine learning.
-# scaler = StandardScaler()
-# scaler.fit(xTrain)
-#
-# xTrain = scaler.transform(xTrain)
-# xTest = scaler.transform(xTest)
 scaler = MinMaxScaler()
-xTrain = scaler.fit_transform(xTrain)
-xTest = scaler.fit_transform(xTest)
-
-
-print(xTrain)
-
-print("Loading")
+xTrain = scaler.fit_transform(xTrainData)
+xTest = scaler.fit_transform(xTestData)
 
 neuralNetwork = MLPRegressor(hidden_layer_sizes=(5, 5, 5), max_iter=1000, activation='logistic', solver='sgd', alpha=1)
 
@@ -187,27 +162,90 @@ neuralNetwork = retrieveModel()
 #
 # for i in range(len(testList)):
 #     print(testList[i], bruh[i])
-
-
-print("Accuracy Test: ", neuralNetwork.score(xTest, yTest))
+#
+#
+# print("Accuracy Test: ", neuralNetwork.score(xTest, yTest))
 
 
 def predictTemperature(form):
+    # Received datetime format: 2022-01-01 17:14
+    # Year, Month, Day, Hour, Minute
+
     inputDate = request.form['date']
     inputTime = request.form['time']
 
 
 
 
+    year = float(form[0:4])
+    month = float(form[5:7])
+    day = float(form[8:10])
 
-    month =
-    day =
-    year =
-    hour =
-    minute =
+    hour = float(form[11:13])
+    minute = float(form[14:16])
 
-    input = np.array([month, day, year, hour, minute])
-    input = scaler.fit_transform(input)
+    print(year)
+    print(month)
+    print(day)
 
-    temp = neuralNetwork.predict(input)
-    return temp
+    print(hour)
+    print(minute)
+    print()
+
+
+    # Creating quick test data. This is needed for the scaler.fit_transform() function
+    inputList = []
+    userInput = np.array([month, day, year, hour, minute])
+    inputList.append(userInput)
+    for index, i in enumerate(range(0, 12)):
+        tempInput = np.array([i, i*2, 2017+(i*0.2), i*2, i*5])
+        inputList.append(tempInput)
+
+
+
+    print("before transform: ", inputList[0])
+    print()
+    inputList = scaler.fit_transform(inputList)
+    print("after transform: ", inputList[0])
+    print()
+    temp = neuralNetwork.predict(inputList)
+    print("after predict: ", temp[0])
+    print()
+
+
+    # Temp[0] is the prediction of the user's input.
+    result = temp[0]
+    return result
+
+
+
+# Setting up Flask.
+# This will communicate with the webpage.
+app = Flask(__name__)  # __name__ references this file
+
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    tempResult = False
+    if request.method == 'POST':
+        dateForm = request.form["date"]
+        timeForm = request.form["time"]
+        dateTimeForm = dateForm + " " + timeForm
+
+        temperatureResult = predictTemperature(dateTimeForm)
+        accuracyTest = neuralNetwork.score(xTest, yTest)
+
+        return redirect(url_for("estimate", result=temperatureResult))
+    return render_template('index.html')
+
+
+
+@app.route("/", methods=['GET', 'POST'])
+def estimate(dateTimeForm):
+    return f"<h1>{dateTimeForm}</h1>"
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
