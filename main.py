@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import csv
 import datetime
+import pickle
 
 from flask import Flask, render_template, url_for, request
 
@@ -23,7 +24,7 @@ def index():
     tempResult = False
     if request.method == 'POST':
         form = request.form
-        tempResult = predictTemperature(form)
+        temperatureResult = predictTemperature(form)
 
     return render_template('index.html')
 
@@ -38,10 +39,11 @@ if __name__ == "__main__":
 
 
 
+scaler = MinMaxScaler()
+neuralNetwork = 0
 
-
-
-
+xTest = 0
+yTest = 0
 
 
 
@@ -148,29 +150,64 @@ print(xTrain)
 print("Loading")
 
 neuralNetwork = MLPRegressor(hidden_layer_sizes=(5, 5, 5), max_iter=1000, activation='logistic', solver='sgd', alpha=1)
-neuralNetwork.fit(xTrain, yTrain)
-
-#  "month", "day", "year", "hour", "min",
-# testData = [[8, 4, 2018, 1, 0]]
-# predictions = neuralNetwork.predict(testData)
-# print(predictions)
 
 
+def trainModel():
+    neuralNetwork.fit(xTrain, yTrain)
 
 
-# big test
-# prediction values are first ran through the scalar.transform feature.
-testList = []
-for index, i in enumerate(range(0, 12)):
-    tempTest = np.array([index+1, 1.0, 2025.0, 1.0, 0.0])
-    testList.append(tempTest)
+#  "month", "day", "year", "hour", "min"
 
-testList = scaler.fit_transform(testList)
-bruh = neuralNetwork.predict(testList)
 
-for i in range(len(testList)):
-    print(testList[i], bruh[i])
+# This saves the model into a file.
+def saveModel(model):
+    filename = "saved_model.sav"
+    pickle.dump(model, open(filename, 'wb'))
+
+
+# This will load the model from the saved file
+def retrieveModel():
+    filename = "saved_model.sav"
+    savedModel = pickle.load(open(filename, 'rb'))
+    return savedModel
+
+
+neuralNetwork = retrieveModel()
+
+
+# # big test
+# # prediction values are first ran through the scalar.transform feature.
+# testList = []
+# for index, i in enumerate(range(0, 12)):
+#     tempTest = np.array([index+1, 1.0, 2025.0, 1.0, 0.0])
+#     testList.append(tempTest)
+#
+# testList = scaler.fit_transform(testList)
+# bruh = neuralNetwork.predict(testList)
+#
+# for i in range(len(testList)):
+#     print(testList[i], bruh[i])
 
 
 print("Accuracy Test: ", neuralNetwork.score(xTest, yTest))
 
+
+def predictTemperature(form):
+    inputDate = request.form['date']
+    inputTime = request.form['time']
+
+
+
+
+
+    month =
+    day =
+    year =
+    hour =
+    minute =
+
+    input = np.array([month, day, year, hour, minute])
+    input = scaler.fit_transform(input)
+
+    temp = neuralNetwork.predict(input)
+    return temp

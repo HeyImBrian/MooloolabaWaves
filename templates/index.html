@@ -17,20 +17,28 @@
     </div>
 
 
-    <form action="{{ url_for('index') }}" method="POST">
+    <!--<form action="{{ url_for('index') }}" method="POST">-->
       <label for="start">Date:</label>
-      <input type="date" id="start" name="trip-start"
+      <input type="date" id="start" name="date"
        value="2022-01-01"
        min="2000-01-01" max="2050-01-01">
 
 
       <label for="appt">Time:</label>
-      <input type="time" id="appt" name="appt"
+      <input type="time" id="appt" name="time"
        min="00:00" max="24:00" required>
 
 
-      <input type="submit" value="Submit">
-    </form>
+      <input type="submit" name="submit" value="Submit"
+      onclick="predictTemp();">
+    <!--</form>-->
+
+
+    <br><br><br><br>
+
+    {% if temperatureResult %}
+      <h2> Predicted temperature: {{temperatureResult}} degrees Celsius </h2>
+    {% endif %}
 
 
 
