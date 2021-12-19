@@ -4,8 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js" integrity="sha512-tMabqarPtykgDtdtSqCL3uLVM0gS1ZkUAVhRFu1vSEFgvB73niFQWJuvviDyBGBH22Lcau4rHB5p2K2T0Xvr6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="jquery-csv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.9/jquery.csv.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Mooloolaba</title>
+
+
+
   </head>
 
 
@@ -41,8 +48,16 @@
       <h2> Predicted temperature for {{date}} {{time}}:<br> {{result}} degrees Celsius </h2>
     {% endif %}
 
+    <br><br><br><br>
 
+    <div>
+      <canvas id="firstChart"></canvas>
+      <canvas id="secondChart"></canvas>
+      <canvas id="thirdChart"></canvas>
+      <canvas id="fourthChart"></canvas>
+    </div>
 
+    <script src="/static/js/charts.js"> </script>
 
 
   </body>

@@ -150,21 +150,9 @@ def retrieveModel():
 neuralNetwork = retrieveModel()
 
 
-# # big test
-# # prediction values are first ran through the scalar.transform feature.
-# testList = []
-# for index, i in enumerate(range(0, 12)):
-#     tempTest = np.array([index+1, 1.0, 2025.0, 1.0, 0.0])
-#     testList.append(tempTest)
-#
-# testList = scaler.fit_transform(testList)
-# bruh = neuralNetwork.predict(testList)
-#
-# for i in range(len(testList)):
-#     print(testList[i], bruh[i])
-#
-#
-# print("Accuracy Test: ", neuralNetwork.score(xTest, yTest))
+
+
+
 
 
 def predictTemperature(form):
@@ -184,14 +172,6 @@ def predictTemperature(form):
     hour = float(form[11:13])
     minute = float(form[14:16])
 
-    print(year)
-    print(month)
-    print(day)
-
-    print(hour)
-    print(minute)
-    print()
-
 
     # Creating quick test data. This is needed for the scaler.fit_transform() function
     inputList = []
@@ -203,14 +183,10 @@ def predictTemperature(form):
 
 
 
-    print("before transform: ", inputList[0])
-    print()
+
     inputList = scaler.fit_transform(inputList)
-    print("after transform: ", inputList[0])
-    print()
+
     temp = neuralNetwork.predict(inputList)
-    print("after predict: ", temp[0])
-    print()
 
 
     # Temp[0] is the prediction of the user's input.
