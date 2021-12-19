@@ -17,8 +17,8 @@
     </div>
 
 
-    <!--<form action="{{ url_for('index') }}" method="POST">-->
-    <form action="#" method="post">
+    <form action="{{ url_for('index') }}" method="POST">
+    <!--form action="#" method="POST WOAH"-->
       <label for="start">Date:</label>
       <input type="date" id="start" name="date"
        value="2022-01-01"
@@ -37,8 +37,8 @@
 
     <br><br><br><br>
 
-    {% if temperatureResult %}
-      <h2> Predicted temperature: {{temperatureResult}} degrees Celsius </h2>
+    {% if result %}
+      <h2> Predicted temperature for {{date}} {{time}}:<br> {{result}} degrees Celsius </h2>
     {% endif %}
 
 

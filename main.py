@@ -233,10 +233,11 @@ def index():
         timeForm = request.form["time"]
         dateTimeForm = dateForm + " " + timeForm
 
-        temperatureResult = predictTemperature(dateTimeForm)
+        temperatureResult = round(predictTemperature(dateTimeForm))
         accuracyTest = neuralNetwork.score(xTest, yTest)
 
-        return redirect(url_for("estimate", result=temperatureResult))
+
+        return render_template("index.html", date=request.form['date'], time=request.form['time'], result=temperatureResult,)
     return render_template('index.html')
 
 
