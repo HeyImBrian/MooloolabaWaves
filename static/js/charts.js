@@ -148,6 +148,8 @@ async function createChart1(){
 createChart2();
 async function createChart2(){
     await createChart1();
+    createChart3();
+
     var tempDT = months;
     var tempData = temperature;
 
@@ -203,4 +205,101 @@ function createChart3(){
         document.getElementById('secondChart'),
         config
     );
+}
+
+
+function createChart3() {
+  var myTableDiv = document.getElementById("thirdChart");
+
+  var table = document.createElement('TABLE');
+  table.border = '1';
+
+  var tableBody = document.createElement('TBODY');
+  table.appendChild(tableBody);
+
+
+
+  // Set the headers
+    var tr = document.createElement('TR');
+    tableBody.appendChild(tr);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Date Time"));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Significant Wave Height"));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Maximum Wave Height"));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Zero Upcrossing"));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Peak Wave Energy"));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Peak Direction"));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode("Temperature"));
+    tr.appendChild(td);
+
+
+  // Fill table rows with data
+  for (var i = 0; i < 30; i++) {
+    var tr = document.createElement('TR');
+    tableBody.appendChild(tr);
+
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(dateTimes[i]));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(hs[i]));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(hMax[i]));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(tz[i]));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(tp[i]));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(peakDirection[i]));
+    tr.appendChild(td);
+
+    var td = document.createElement('TD');
+    td.width = '200';
+    td.appendChild(document.createTextNode(temperature[i]));
+    tr.appendChild(td);
+
+  }
+  myTableDiv.appendChild(table);
 }
