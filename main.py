@@ -81,7 +81,6 @@ while currDataIndex < maxDataIndex:
 
 
 
-
 # Need to remove rows with -99.
 for index, row in enumerate(waveRowsFloats):
     for indexInRow, value in enumerate(row):
@@ -91,6 +90,7 @@ for index, row in enumerate(waveRowsFloats):
             while waveRowsFloats[index][indexInRow] < 0:
                 waveRowsFloats[index][indexInRow] = (((waveRowsFloats[index - currAddIndex][indexInRow]) + (waveRowsFloats[index + currAddIndex][indexInRow])) / 2)
                 currAddIndex += 1
+
 
 
 
@@ -164,7 +164,6 @@ def predictTemperature(form):
 
 
 
-
     year = float(form[0:4])
     month = float(form[5:7])
     day = float(form[8:10])
@@ -180,7 +179,6 @@ def predictTemperature(form):
     for index, i in enumerate(range(0, 12)):
         tempInput = np.array([i, i*2, 2017+(i*0.2), i*2, i*5])
         inputList.append(tempInput)
-
 
 
 

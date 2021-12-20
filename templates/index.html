@@ -22,6 +22,7 @@
     <div class="bgImgs">
       <img class="theBayImg" src="{{ url_for('static', filename='headerImg.png') }}">
     </div>
+    <br>
 
 
     <form action="{{ url_for('index') }}" method="POST">
@@ -45,15 +46,19 @@
     <br><br><br><br>
 
     {% if result %}
-      <h2> Predicted temperature for {{date}} {{time}}:<br> {{result}} degrees Celsius </h2>
+      <h2 id="predictedText"> Predicted temperature for {{date}} {{time}}:<br> {{result}} degrees Celsius </h2>
+      <h3 id="tempAsWords"> </h3>
     {% endif %}
 
     <br><br><br><br>
 
-    <div>
+    <div id="canvasDiv">
       <canvas id="firstChart"></canvas>
+      <br><br><br><br>
       <canvas id="secondChart"></canvas>
+      <br><br><br><br>
       <canvas id="thirdChart"></canvas>
+      <br><br><br><br>
       <canvas id="fourthChart"></canvas>
     </div>
 

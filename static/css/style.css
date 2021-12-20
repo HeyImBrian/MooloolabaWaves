@@ -9,6 +9,7 @@ body{
     margin:0;
     font-family: sans-serif;
     text-align: center;
+    background-color: lightblue;
 }
 
 
@@ -25,6 +26,10 @@ img{
     margin: 0;
     overflow: hidden;
     text-align: center;
+}
+
+#canvasDiv{
+    padding: 20%;
 }
 
 .bgImg .theBayImg{
