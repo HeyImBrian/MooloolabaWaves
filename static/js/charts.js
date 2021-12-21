@@ -19,11 +19,19 @@ var peakDirection = [];
 var temperature = [];
 
 
+var highestTemps2017 = []; // Contains an extra value at the beginning of the array
+var highestTemps2018 = [];
+
+
+
+
 async function getData(){
     const response = await fetch('static/js/WaveData.csv');
     const data = await response.text();
     const rows = data.split('\r\n').slice(1);
 
+    var currHighest = 0;
+    var currMonth = 1;
 
     for (let i = 0; i < rows.length-1; i++){
         var dateTime = rows[i];
@@ -54,18 +62,57 @@ async function getData(){
 
 
 
+        // This is required because the days and months swap at a certain point in the data.
         // Day Month Year
         if (i < 35039){
-            months.push(splitDates[0]);
-            days.push(splitDates[1]);
-            years.push(splitDates[2].slice(0, 4));
+            months.push(parseInt(splitDates[0]));
+            days.push(parseInt(splitDates[1]));
+            years.push(parseInt(splitDates[2].slice(0, 4)));
 
         // Month Day Year
         } else if (i > 35039){
-            days.push(splitDates[0]);
-            months.push(splitDates[1]);
+            days.push(parseInt(splitDates[0]));
+            months.push(parseInt(splitDates[1]));
             years.push("2019");
         }
+
+
+
+        // Gathering the highest temps
+        var temp = items[6];
+        if (i < 17509){ // 2017
+            if (temp > currHighest){
+                currHighest = temp;
+                console.log(items[0] + "   " + currHighest);
+            }
+
+            // Increase month index
+            if (i % 1440 == 0){
+                currMonth += 1;
+                highestTemps2017.push(currHighest);
+                currHighest = 0;
+
+                if (currMonth == 13){
+                    currMonth = 1;
+                }
+            }
+        } else if (i < 35040){ // 2018
+            if (temp > currHighest){
+                currHighest = temp;
+            }
+
+            // Increase month index
+            if (i % 1440 == 0){
+                currMonth += 1;
+                highestTemps2018.push(currHighest);
+                currHighest = 0;
+
+                if (currMonth == 13){
+                    currMonth = 1;
+                }
+            }
+        }
+
 
 
 
@@ -149,37 +196,8 @@ createChart2();
 async function createChart2(){
     await createChart1();
     createChart3();
+    createChart4();
 
-    var tempDT = months;
-    var tempData = temperature;
-
-
-
-    const chartData = {
-      labels: tempDT,
-      datasets: [{
-        label: 'Relationship Between Month and Temperature',
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
-        data: tempData,
-      }]
-    };
-
-    const config = {
-      type: 'scatter',
-      data: chartData,
-      options: {}
-    };
-
-    const myChart = new Chart(
-        document.getElementById('secondChart'),
-        config
-    );
-}
-
-
-function createChart3(){
-    createChart1();
     var tempDT = months;
     var tempData = temperature;
 
@@ -302,4 +320,82 @@ function createChart3() {
 
   }
   myTableDiv.appendChild(table);
+}
+
+
+
+
+
+
+
+
+
+
+
+function createChart4(){
+    highestTemps2017.shift();
+
+    const data = {
+      labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      datasets: [
+        {
+          label: '2017',
+          data: highestTemps2017,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgb(255, 99, 132)',
+          fill: false
+        },
+        {
+          label: '2018',
+          data: highestTemps2018,
+          borderColor: 'rgb(99, 255, 132)',
+          backgroundColor: 'rgb(99, 255, 132)',
+          fill: false
+        }
+      ]
+    };
+
+
+
+
+
+
+    const chartData = {
+      labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      datasets: [{
+        label: 'Relationship Between Month and Temperature',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: data,
+      }]
+    };
+
+    const config = {
+      type: 'radar',
+      data: data,
+      options: {
+        plugins: {
+          filler: {
+            propagate: false
+          },
+          'samples-filler-analyser': {
+            target: 'chart-analyser'
+          }
+        },
+        interaction: {
+          intersect: true
+        }
+      }
+    };
+
+
+    const myChart = new Chart(
+        document.getElementById('fourthChart'),
+        config
+    );
+
+console.log(highestTemps2017);
+console.log(highestTemps2018);
+
+
 }

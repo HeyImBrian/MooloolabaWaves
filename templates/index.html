@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js" integrity="sha512-tMabqarPtykgDtdtSqCL3uLVM0gS1ZkUAVhRFu1vSEFgvB73niFQWJuvviDyBGBH22Lcau4rHB5p2K2T0Xvr6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="jquery-csv.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.9/jquery.csv.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Mooloolaba</title>
@@ -51,18 +50,21 @@
     {% endif %}
 
 
-
+    <br><br><br><br>
     <div id="canvasDiv">
       <canvas id="firstChart"></canvas>
       <br><br><br><br>
       <canvas id="secondChart"></canvas>
       <br><br><br><br>
 
+      <h3>Monthly Top Water Temperatures</h3>
+      <canvas id="fourthChart"></canvas>
+      <br><br><br><br>
+
       <h3>First 30 Rows of Data</h3>
       <h5><a href="https://www.kaggle.com/jolasa/waves-measuring-buoys-data-mooloolaba">Source</a></h5>
       <h5><a href="https://www.data.qld.gov.au/dataset">Original Data</a></h5>
       <div id="thirdChart"></div>
-      <!--canvas id="thirdChart"></canvas-->
       <br><br><br><br>
       <!--canvas id="fourthChart"></canvas-->
     </div>
