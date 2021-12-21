@@ -83,7 +83,6 @@ async function getData(){
         if (i < 17509){ // 2017
             if (temp > currHighest){
                 currHighest = temp;
-                console.log(items[0] + "   " + currHighest);
             }
 
             // Increase month index
@@ -394,8 +393,6 @@ function createChart4(){
         config
     );
 
-console.log(highestTemps2017);
-console.log(highestTemps2018);
 
 
 }
