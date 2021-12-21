@@ -26,21 +26,20 @@ var highestTemps2018 = [];
 
 
 
-const target = 'https://raw.githubusercontent.com/HeyImBrian/MooloolabaWaves/main/WaveData.csv?token=ASVAN7X6GB3VE6TI4GA5AEDBYIPU6'; //file
-async function getCsvData(){
-const getCsv = await fetch(target, {
-    method: 'get',
-    headers: {
-        'content-type': 'text/csv;charset=UTF-8',
-    }
-});
-}
-
-console.log(getCsvData());
-
+//const target = 'https://raw.githubusercontent.com/HeyImBrian/MooloolabaWaves/main/WaveData.csv?token=ASVAN7X6GB3VE6TI4GA5AEDBYIPU6'; //file
+//async function getCsvData(){
+//const getCsv = await fetch(target, {
+//    method: 'get',
+//    headers: {
+//        'content-type': 'text/csv;charset=UTF-8',
+//    }
+//});
+//}
+//
+//console.log(getCsvData());
 
 async function getData(){
-    const response = await fetch('../static/js/WaveData.csv');
+    const response = await fetch('./static/js/wavedata.csv');
     const data = await response.text();
     const rows = data.split('\r\n').slice(1);
 
