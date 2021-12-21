@@ -43,6 +43,8 @@ async function getData(){
     const data = await response.text();
     const rows = data.split('\r\n').slice(1);
 
+    console.log(rows[5]);
+
     var currHighest = 0;
     var currMonth = 1;
 
