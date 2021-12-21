@@ -26,7 +26,7 @@ var highestTemps2018 = [];
 
 
 async function getData(){
-    const response = await fetch('./static/js/WaveData.csv');
+    const response = await fetch('../static/js/WaveData.csv');
     const data = await response.text();
     const rows = data.split('\r\n').slice(1);
 
