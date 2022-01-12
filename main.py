@@ -2,25 +2,13 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import classification_report, confusion_matrix
 
-from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
-import csv
 import datetime
 import pickle
 
-from flask import Flask, render_template, url_for, request, redirect
-
-
-
-
-
-
-
-
-
+from flask import Flask, render_template, request
 
 
 
@@ -29,7 +17,6 @@ neuralNetwork = 0
 
 xTest = 0
 yTest = 0
-
 
 
 # Load csv into different variables
@@ -45,12 +32,7 @@ waveRowsFloats = np.loadtxt(dataFile, delimiter=",", skiprows=1, usecols=(1, 2, 
 allAttributes = ["month", "day", "year", "hour", "min", "significant height","max height","zero upcrossing wave period","peak energy wave period","peak direction","temperature"]
 
 
-
-
-
-
 # Setting up the time columns
-
 currDateTime = datetime.datetime(month=1, day=1, year=2017, hour=1, minute=0)
 daysList = []
 monthList = []
@@ -77,10 +59,6 @@ while currDataIndex < maxDataIndex:
             break
 
 
-
-
-
-
 # Need to remove rows with -99.
 for index, row in enumerate(waveRowsFloats):
     for indexInRow, value in enumerate(row):
@@ -90,9 +68,6 @@ for index, row in enumerate(waveRowsFloats):
             while waveRowsFloats[index][indexInRow] < 0:
                 waveRowsFloats[index][indexInRow] = (((waveRowsFloats[index - currAddIndex][indexInRow]) + (waveRowsFloats[index + currAddIndex][indexInRow])) / 2)
                 currAddIndex += 1
-
-
-
 
 
 # Appending the all attributes to the beginning of the waveRowsFloats.
@@ -105,10 +80,6 @@ dataTemp = np.append(monthList, dataTemp, axis=1)
 
 
 data = pd.DataFrame(dataTemp, columns=allAttributes)
-
-
-# plt.scatter(dataTemp[:, 0], dataTemp[:, 6])
-# plt.show()
 
 
 # y is the temperature
@@ -128,7 +99,7 @@ neuralNetwork = MLPRegressor(hidden_layer_sizes=(5, 5, 5), max_iter=1000, activa
 
 
 def trainModel():
-    neuralNetwork.fit(xTrain, yTrain)
+    return neuralNetwork.fit(xTrain, yTrain)
 
 
 #  "month", "day", "year", "hour", "min"
@@ -150,9 +121,21 @@ def retrieveModel():
 neuralNetwork = retrieveModel()
 
 
+inputList = []
+userInput = np.array([1, 1, 2022, 1, 1])
+userInput2 = np.array([1, 1, 2022, 16, 1])
+
+inputList.append(userInput)
+inputList.append(userInput2)
+
+for index, i in enumerate(range(0, 12)):
+    tempInput = np.array([i, i*2, 2017+(i*0.2), i*2, i*5])
+    inputList.append(tempInput)
 
 
+inputList = scaler.fit_transform(inputList)
 
+temp = neuralNetwork.predict(inputList)
 
 
 def predictTemperature(form):
@@ -161,7 +144,6 @@ def predictTemperature(form):
 
     inputDate = request.form['date']
     inputTime = request.form['time']
-
 
 
     year = float(form[0:4])
@@ -177,9 +159,8 @@ def predictTemperature(form):
     userInput = np.array([month, day, year, hour, minute])
     inputList.append(userInput)
     for index, i in enumerate(range(0, 12)):
-        tempInput = np.array([i, i*2, 2017+(i*0.2), i*2, i*5])
+        tempInput = np.array([i+1, i*2, 2017+(i*0.2), i*2, i*5])
         inputList.append(tempInput)
-
 
 
     inputList = scaler.fit_transform(inputList)
@@ -207,11 +188,16 @@ def index():
         timeForm = request.form["time"]
         dateTimeForm = dateForm + " " + timeForm
 
-        temperatureResult = round(predictTemperature(dateTimeForm))
+        temperatureResult = predictTemperature(dateTimeForm)
+        temperatureResult = str(temperatureResult)
+        temperatureResult = temperatureResult[0:5]
+
         accuracyTest = neuralNetwork.score(xTest, yTest)
+        accuracyTest *= 100
+        accuracyTest = str(accuracyTest)
+        accuracyTest = accuracyTest[0:5] + '%'
 
-
-        return render_template("index.html", date=request.form['date'], time=request.form['time'], result=temperatureResult,)
+        return render_template("index.html", date=request.form['date'], time=request.form['time'], result=temperatureResult, accuracy=accuracyTest)
     return render_template('index.html')
 
 

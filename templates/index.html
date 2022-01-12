@@ -45,8 +45,9 @@
     <br><br><br><br>
 
     {% if result %}
-      <h2 id="predictedText"> Predicted temperature for {{date}} {{time}}:<br> {{result}} degrees Celsius </h2>
+      <h2 id="predictedText"> Predicted temperature for {{date}} {{time}}:<br> {{result}} degrees Celsius</h2>
       <h3 id="tempAsWords"> </h3>
+      <h3>Prediction Accuracy: {{accuracy}}</h3>
     {% endif %}
 
 

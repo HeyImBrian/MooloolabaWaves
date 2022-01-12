@@ -1,9 +1,6 @@
-
-
-
 var rows = [];
 
-//     Date/Time,Hs,Hmax,Tz,Tp,Peak Direction,SST
+// Date/Time,Hs,Hmax,Tz,Tp,Peak Direction,SST
 var months = [];
 var days = [];
 var years = [];
@@ -19,13 +16,8 @@ var peakDirection = [];
 var temperature = [];
 
 
-var highestTemps2017 = []; // Contains an extra value at the beginning of the array
+var highestTemps2017 = [];
 var highestTemps2018 = [];
-
-
-
-
-
 
 
 async function getData(){
@@ -67,7 +59,6 @@ async function getData(){
         }
 
 
-
         // This is required because the days and months swap at a certain point in the data.
         // Day Month Year
         if (i < 35039){
@@ -81,7 +72,6 @@ async function getData(){
             months.push(parseInt(splitDates[1]));
             years.push("2019");
         }
-
 
 
         // Gathering the highest temps
@@ -119,9 +109,6 @@ async function getData(){
         }
 
 
-
-
-
         // Hours
         hours.push(hour);
 
@@ -138,7 +125,6 @@ async function getData(){
         temperature.push(items[6]);
     }
 }
-
 
 
 // Get the predicted temperature from the HTML
@@ -163,15 +149,11 @@ if (predictedTemp > 37){
 }
 
 
-
-
-
-
 async function createChart1(){
     rows = await getData();
 
-    var tempLabels = dateTimes.slice(0, 47);
-    var tempData = temperature.slice(0, 47);
+    var tempLabels = ["0:00", "0:30", "1:00", "1:30", "2:00", "2:30", "3:00", "3:30", "4:00", "4:30", "5:00", "5:30", "6:00", "6:30", "7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"];
+    var tempData = temperature.slice(0, 48);
 
 
     const chartData = {
@@ -328,15 +310,6 @@ function createChart3() {
 }
 
 
-
-
-
-
-
-
-
-
-
 function createChart4(){
     highestTemps2017.shift();
 
@@ -359,11 +332,6 @@ function createChart4(){
         }
       ]
     };
-
-
-
-
-
 
     const chartData = {
       labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -393,12 +361,8 @@ function createChart4(){
       }
     };
 
-
     const myChart = new Chart(
         document.getElementById('fourthChart'),
         config
     );
-
-
-
 }
